@@ -19,12 +19,12 @@ class IniIncluderPlugin(BasePlugin):
             section = args.get('section')
             
             if not ini_path:
-                return "<!-- Error: No file specified and no default config_file configured -->"
+                raise ValueError("No file specified and no default config_file configured")
             
             full_path = self._get_full_path(ini_path, config)
             
             if not os.path.exists(full_path):
-                return f"<!-- Error: File {ini_path} not found -->"
+                raise FileNotFoundError(f"File {ini_path} not found at {full_path}")
             
             try:
                 ini_content = self._read_ini_with_comments(full_path)
@@ -36,7 +36,7 @@ class IniIncluderPlugin(BasePlugin):
                     return f"```ini\n{ini_content}\n```"
                     
             except Exception as e:
-                return f"<!-- Error reading {ini_path}: {str(e)} -->"
+                raise RuntimeError(f"Error reading {ini_path}: {str(e)}") from e
         
         pattern = r'\{%\s*ini-include\s+(.*?)\s*%\}'
         return re.sub(pattern, replace_ini_include, markdown, flags=re.IGNORECASE | re.DOTALL)
