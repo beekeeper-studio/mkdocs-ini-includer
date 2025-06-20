@@ -11,6 +11,10 @@ class IniIncluderPlugin(BasePlugin):
         ('base_path', config_options.Type(str, default='')),
         ('config_file', config_options.Type(str, default='')),
     )
+    
+    def __init__(self):
+        super().__init__()
+        self.ini_files = set()
 
     def on_page_markdown(self, markdown, page, config, files):
         def replace_ini_include(match):
@@ -26,6 +30,9 @@ class IniIncluderPlugin(BasePlugin):
             if not os.path.exists(full_path):
                 raise FileNotFoundError(f"File {ini_path} not found at {full_path}")
             
+            # Track this INI file for dependency watching
+            self.ini_files.add(full_path)
+            
             try:
                 ini_content = self._read_ini_with_comments(full_path)
                 
@@ -40,6 +47,12 @@ class IniIncluderPlugin(BasePlugin):
         
         pattern = r'\{%\s*ini-include\s+(.*?)\s*%\}'
         return re.sub(pattern, replace_ini_include, markdown, flags=re.IGNORECASE | re.DOTALL)
+    
+    def on_serve(self, server, config, builder):
+        # Add INI files to the file watcher so changes trigger rebuilds
+        for ini_file in self.ini_files:
+            if os.path.exists(ini_file):
+                server.watch(ini_file)
 
     def _parse_include_args(self, args_string):
         args = {}

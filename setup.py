@@ -1,11 +1,15 @@
 from setuptools import setup, find_packages
+import os
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
+# Get version from environment variable or default to 1.0.0
+version = os.environ.get("PACKAGE_VERSION", "1.0.0")
+
 setup(
     name="mkdocs-ini-includer",
-    version="1.0.0",
+    version=version,
     author="MkDocs Ini Includer",
     description="A MkDocs plugin to include INI file content in documentation",
     long_description=long_description,

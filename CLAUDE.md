@@ -40,12 +40,29 @@ The plugin works by:
 pip install -e .  # Install in development mode
 ```
 
-### Testing with Demo
+### Running Tests
+```bash
+# Run all tests with verbose output
+python -m unittest discover tests/ -v
+
+# Run specific test file
+python -m unittest tests.test_plugin -v
+
+# Alternative with pytest (if installed)
+pytest tests/ -v --cov=mkdocs_ini_includer
+```
+
+### Testing with Demo Site
 ```bash
 cd demo
-mkdocs serve  # Run demo site locally
-mkdocs build  # Build demo site
+mkdocs serve  # Run demo site locally with live reload
+mkdocs build  # Build demo site to test static generation
 ```
+
+**Live Reload Testing**: The plugin supports live reload during development. When using `mkdocs serve`, changes to INI files are automatically detected and trigger page rebuilds. This allows you to:
+1. Edit INI files in the demo directory
+2. Refresh the browser to see updated content immediately
+3. Test section filtering and file inclusion in real-time
 
 ### Distribution
 ```bash

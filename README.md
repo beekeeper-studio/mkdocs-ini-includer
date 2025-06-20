@@ -84,9 +84,14 @@ cert_path = /path/to/cert
 
 This will include the `[database]` section and all its subsections like `[database.ssl]`.
 
+## Development & Live Reload
+
+The plugin supports live reload during development. When using `mkdocs serve`, changes to INI files are automatically detected and trigger page rebuilds, allowing you to see updates immediately without restarting the development server.
+
 ## Notes
 - File paths are relative to your `docs_dir` unless `base_path` is configured
 - Comments and formatting are preserved
 - Array keys (like `key[]=value`) are supported
 - Error handling displays helpful messages in the generated docs
+- Live reload works with `mkdocs serve` for real-time INI file updates
 
